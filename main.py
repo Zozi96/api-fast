@@ -3,11 +3,15 @@ from fastapi import FastAPI
 from models import database as connection
 from utils import list_tables
 
+from routes.user import create_user
+
 app = FastAPI(
     title='Reseña de peliculas',
     description='Coloca tus reseñas de tus pelis favoritas',
     version='1.0'
 )
+
+app.add_api_route(path='createuser/', endpoint=create_user, methods=['POST'])
 
 
 @app.on_event('startup')
