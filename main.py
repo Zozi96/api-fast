@@ -11,7 +11,7 @@ app = FastAPI(
     version='1.0'
 )
 
-app.add_api_route(path='createuser/', endpoint=create_user, methods=['POST'])
+app.add_api_route(path='/createuser', endpoint=create_user, methods=['POST'])
 
 
 @app.on_event('startup')
