@@ -12,6 +12,10 @@ app = FastAPI(
 )
 
 
+@app.get('/')
+async def index():
+    return {'message': 'Hello World'}
+
 # Routers
 app.include_router(user_router)
 app.include_router(review_router)
