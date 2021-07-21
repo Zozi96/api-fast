@@ -1,5 +1,5 @@
 from pydantic import BaseModel, validator
-from . import PeeweeGetterDict
+from . import ResponseModel
 
 
 class UserSchema(BaseModel):
@@ -15,10 +15,6 @@ class UserSchema(BaseModel):
         return username
 
 
-class UserResonseModel(BaseModel):
+class UserResonseModel(ResponseModel):
     id: int
     username: str
-
-    class Config:
-        orm_mode = True
-        gettet_dict = PeeweeGetterDict

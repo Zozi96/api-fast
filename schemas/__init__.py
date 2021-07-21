@@ -1,5 +1,5 @@
 from peewee import ModelSelect
-
+from pydantic import BaseModel
 from pydantic.utils import GetterDict
 
 
@@ -9,3 +9,9 @@ class PeeweeGetterDict(GetterDict):
         if isinstance(res, ModelSelect):
             return list(res)
         return res
+
+
+class ResponseModel(BaseModel):
+    class Config:
+        orm_mode = True
+        getter_dict = PeeweeGetterDict

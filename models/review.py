@@ -14,8 +14,16 @@ class Movie(models.Model):
 
 
 class UserReview(models.Model):
-    user = models.ForeignKeyField(User, backref='reviews')
-    movie = models.ForeignKeyField(Movie, backref='reviews')
+    user = models.ForeignKeyField(
+        User,
+        db_column='user_id',
+        backref='reviews'
+    )
+    movie = models.ForeignKeyField(
+        Movie,
+        db_column='movie_id',
+        backref='reviews'
+    )
     review = models.TextField()
     score = models.IntegerField()
 

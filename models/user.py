@@ -16,5 +16,7 @@ class User(models.Model):
     @classmethod
     def create_password(cls, password):
         h = hashlib.md5()
-        h.update(password.encode('utf-8'))
+        h.update(
+            password.encode('utf-8')
+        )
         return h.hexdigest()
