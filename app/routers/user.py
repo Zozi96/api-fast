@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from models.user import User
-from schemas.users import UserResonseModel, UserSchema
+from ..models.user import User
+from ..schemas.users import UserResonseModel, UserSchema
 
 router = APIRouter(prefix='/users')
 
@@ -12,8 +12,7 @@ async def create_user(user: UserSchema):
 
     hash_password = User.create_password(password=user.password)
 
-    user = User.create(
+    return User.create(
         username=user.username,
         password=hash_password,
     )
-    return user
