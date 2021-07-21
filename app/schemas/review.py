@@ -1,4 +1,4 @@
-from . import PeeweeGetterDict, ResponseModel
+from . import ResponseModel
 from pydantic import BaseModel, validator
 
 
@@ -30,7 +30,7 @@ class ReviewRequestModel(BaseModel, ScoreValidator):
 
 class ReviewResponseModel(ResponseModel):
     id: int
-    movie_id: int  # ID de la pelicula
+    movie: MovieResponseModel  # ID de la pelicula
     review: str
     score: int
 
