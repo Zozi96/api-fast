@@ -1,3 +1,4 @@
+import hashlib
 from . import models, database
 
 
@@ -11,3 +12,9 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+    @classmethod
+    def create_password(cls, password):
+        h = hashlib.md5()
+        h.update(password.encode('utf-8'))
+        return h.hexdigest()
