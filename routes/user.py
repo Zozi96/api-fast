@@ -16,7 +16,4 @@ async def create_user(user: UserSchema):
         username=user.username,
         password=hash_password,
     )
-    return UserResonseModel(
-        id=user.id,
-        username=user.username
-    )
+    return user
