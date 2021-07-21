@@ -19,13 +19,13 @@ async def create_movie(movie: MovieRequestModel):
 
 @router.post('/create', response_model=ReviewResponseModel)
 async def create_review(user_review: ReviewRequestModel):
-    if User.select().where(User.id == user_review.user_id).first() is None:
+    if User.select().where(User.id == user_review.user).first() is None:
         raise HTTPException(
             status_code=404,
             detail='User not found'
         )
 
-    if Movie.select().where(Movie.id == user_review.movie_id).first() is None:
+    if Movie.select().where(Movie.id == user_review.movie).first() is None:
         raise HTTPException(
             status_code=404,
             detail='Movie not found'
@@ -40,8 +40,8 @@ async def create_review(user_review: ReviewRequestModel):
 
 
 @router.get('/list', response_model=List[ReviewResponseModel])
-async def get_reviews():
-    reviews = UserReview.select()
+async def get_reviews(page: int = 1, limit: int = 10):
+    reviews = UserReview.select().paginate(page, limit)
     return [review for review in reviews]
 
 
