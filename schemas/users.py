@@ -12,3 +12,8 @@ class UserSchema(BaseModel):
                 'La longitud debe encontrarse entre 3 y 50 caracteres'
             )
         return username
+
+
+class UserResonseModel(BaseModel):
+    id: int
+    username: str

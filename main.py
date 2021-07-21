@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from models import database as connection
 from utils import list_tables
 
-from routes.user import create_user
+from routes.user import router as user_router
 
 app = FastAPI(
     title='Reseña de peliculas',
@@ -11,7 +11,7 @@ app = FastAPI(
     version='1.0'
 )
 
-app.add_api_route(path='/createuser', endpoint=create_user, methods=['POST'])
+app.include_router(user_router)
 
 
 @app.on_event('startup')

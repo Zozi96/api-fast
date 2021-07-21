@@ -1,8 +1,11 @@
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException
 from models.user import User
-from schemas.users import UserSchema
+from schemas.users import UserResonseModel, UserSchema
+
+router = APIRouter(prefix='/users')
 
 
+@router.post('/create', response_model=UserResonseModel)
 async def create_user(user: UserSchema):
     if User.select().where(User.username == user.username).exists():
         return HTTPException(409, 'El username ya se encuentra en uso')
@@ -13,7 +16,7 @@ async def create_user(user: UserSchema):
         username=user.username,
         password=hash_password,
     )
-    return {
-        'data': user.username,
-        'message': 'Usuario creado correctamente'
-    }
+    return UserResonseModel(
+        id=user.id,
+        username=user.username
+    )
