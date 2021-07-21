@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, Response
+from app.schemas.review import ReviewResponseModel
+from typing import List
+from fastapi import APIRouter, HTTPException, Response, Cookie
 from fastapi.security import HTTPBasicCredentials
 from ..models.user import User
 from ..schemas.users import UserResonseModel, UserSchema
@@ -39,5 +41,15 @@ async def login(credentials: HTTPBasicCredentials, response: Response):
             401,
             'El password es incorrecto'
         )
-    response.set_cookie(key='user_id', value=user.id)
-    return user
+    response.set_cookie(key='user_id', value=user.id)  # TOKEN    return user
+
+
+@router.get('/reviews', response_model=List[ReviewResponseModel])
+async def get_reviews(user_id: int = Cookie(None)):
+    user = User.select().where(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(
+            404,
+            'El usuario no existe'
+        )
+    return [user_review for user_review in user.reviews]
