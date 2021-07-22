@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, status
 from fastapi.security import HTTPBasicCredentials, OAuth2PasswordRequestForm
-from app.settings.security import access_token, oauth2_schema
+from app.settings.security import access_token, get_current_user
 from app.schemas.review import ReviewResponseModel
 from ..models.user import User
 from ..schemas.users import UserResonseModel, UserSchema
@@ -82,7 +82,8 @@ async def authenticate(form_data: OAuth2PasswordRequestForm = Depends()):
     }
 
 @router.get('/access_denied')
-async def saludo(token: str = Depends(oauth2_schema('/users/authentication'))):
+async def saludo(user: str = Depends(get_current_user)):
+    print(user)
     return {
         'message': 'Hello}!'
     }
