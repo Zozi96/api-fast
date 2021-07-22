@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, status
 from fastapi.security import HTTPBasicCredentials, OAuth2PasswordRequestForm
-from app.settings.security import create_token
+from app.settings.security import create_token, oauth2_schema
 from app.schemas.review import ReviewResponseModel
 from ..models.user import User
 from ..schemas.users import UserResonseModel, UserSchema
@@ -79,4 +79,10 @@ async def authenticate(form_data: OAuth2PasswordRequestForm = Depends()):
     return {
         'token': create_token(form_data.username),
         'token-type': 'Bearer'
+    }
+
+@router.get('/access_denied')
+async def saludo(token: str = Depends(oauth2_schema('/users/authentication'))):
+    return {
+        'message': 'Hello}!'
     }
