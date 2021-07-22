@@ -14,4 +14,4 @@ def access_token(username):
 
 
 def oauth2_schema(endpoint: str):
-    return OAuth2PasswordBearer(tokenUrl=endpoint)
+    return OAuth2PasswordBearer(endpoint)
