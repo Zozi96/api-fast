@@ -1,7 +1,8 @@
-from app.schemas.review import ReviewResponseModel
 from typing import List
-from fastapi import APIRouter, HTTPException, Response, Cookie
-from fastapi.security import HTTPBasicCredentials
+from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, status
+from fastapi.security import HTTPBasicCredentials, OAuth2PasswordRequestForm
+from app.settings.security import create_token
+from app.schemas.review import ReviewResponseModel
 from ..models.user import User
 from ..schemas.users import UserResonseModel, UserSchema
 
@@ -23,7 +24,7 @@ async def create_user(user: UserSchema):
         password=hash_password,
     )
 
-
+# Login a traves de cookie
 @router.post('/login', response_model=UserResonseModel)
 async def login(credentials: HTTPBasicCredentials, response: Response):
     user = User.select().where(
@@ -53,3 +54,29 @@ async def get_reviews(user_id: int = Cookie(None)):
             'El usuario no existe'
         )
     return [user_review for user_review in user.reviews]
+
+# Login con JWT
+@router.post('/authentication')
+async def authenticate(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = User.select().where(User.username == form_data.username).first()
+
+    # Verificando si el usuario existe o es invalido
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Could not validate credentials',
+            headers={'WWW-Authenticate': 'Bearer'}
+        )
+
+    # Validando contraseña
+    if user.password != User.create_password(password=form_data.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Could not validate credentials',
+            headers={'WWW-Authenticate': 'Bearer'}
+        )
+
+    return {
+        'token': create_token(form_data.username),
+        'token-type': 'Bearer'
+    }
